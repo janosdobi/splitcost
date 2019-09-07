@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>SplitCost Application</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+<body>
+	<div class="container">
+
+		<div class="col-sm-9">
+			<form th:action="@{/dashboard}" method="get">
+				<button class="btn btn-md btn-warning btn-block" type="Submit">Back
+					to dashboard</button>
+			</form>
+		</div>
+
+		<form autocomplete="on" action="#" th:action="@{/updateAllocation}"
+			th:object="${updateDebtsDTO}" method="post" class="form-horizontal"
+			role="form">
+			<div th:each="debt, itemStat : *{debts}">
+				<label th:text="${debt.debtor}"></label> <input type="number"
+					th:field="*{debts[__${itemStat.index}__].amount}" /> <input
+					type="hidden" th:field="*{debts[__${itemStat.index}__].id}" /> <input
+					type="hidden" th:field="*{debts[__${itemStat.index}__].cost}" /> <input
+					type="hidden" th:field="*{debts[__${itemStat.index}__].debtor}" />
+			</div>
+			<label>Allocated to me: </label><input type="number"
+				th:field="*{selfAllocated}" />
+			<div class="form-group">
+				<div class="col-sm-9">
+					<button type="submit" class="btn btn-primary btn-block">Allocate</button>
+				</div>
+			</div>
+
+			<span th:utext="${errorMessage}"></span> <br>
+		</form>
+		<br>
+	</div>
+
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>SplitCost Application</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+<body>
+	<div class="container">
+		<h1
+			th:text="'Welcome ' + ${userBalanceDTO.user.firstName} + '! This is your SplitCost dashboard.'"></h1>
+		<br>
+		<div class="col-sm-9">
+			<form th:action="@{/logout}" method="get">
+				<button class="btn btn-md btn-warning btn-block" type="Submit">Log out</button>
+			</form>
+		</div>
+		<br>
+		<div th:if="${not #maps.isEmpty(userBalanceDTO.userBalanceMap)}">
+			<table style="width: 100%">
+				<tr th:each="key : ${userBalanceDTO.userBalanceMap.keySet()}">
+					<td
+						th:with="balance=${userBalanceDTO.userBalanceMap.get(key)}, oppBalance=${-balance}"
+						th:text="${balance} < 0 ? 
+						'You owe ' + ${key} + ' HUF ' + ${oppBalance} + '. Pay up bitch!' : 
+						${key} + ' owes you HUF ' + ${balance} + '. Time to collect!'" />
+					<td th:if="${userBalanceDTO.userBalanceMap.get(key)}>0">
+						<form action="#" th:action="@{/dashboard}" method="post"
+							th:object="${user}">
+							<input name="id" type="hidden" th:value="${key.id}" />
+							<button class="btn btn-md btn-warning btn-block" type="submit">Mark
+								as settled</button>
+						</form>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<br>
+		<div th:if="${#maps.isEmpty(userBalanceDTO.userBalanceMap)}">
+			<p>You do not owe anything, and have no exposures. Go spend some
+				money.</p>
+		</div>
+
+		<form th:action="@{/newCost}" method="get">
+			<button class="btn btn-md btn-warning btn-block" type="Submit">I
+				have spent money</button>
+		</form>
+	</div>
+
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
