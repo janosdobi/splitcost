@@ -2,23 +2,24 @@ package home.dj.splitcost.entities.dto;
 
 import java.util.Map;
 
-import home.dj.splitcost.entities.User;
+public class UserBalanceDTO implements DataDTO {
 
-public class UserBalanceDTO {
-	
-	private User user;
-	private Map<User, Double> userBalanceMap;
-	
-	public User getUser() {
-		return user;
+	private String userName;
+	private Map<String, Double> userBalanceMap;
+
+	public String getUserName() {
+		return userName;
 	}
-	public void setUser(User user) {
-		this.user = user;
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-	public Map<User, Double> getUserBalanceMap() {
+
+	public Map<String, Double> getUserBalanceMap() {
 		return userBalanceMap;
 	}
-	public void setUserBalanceMap(Map<User, Double> userBalanceMap) {
+
+	public void setUserBalanceMap(Map<String, Double> userBalanceMap) {
 		this.userBalanceMap = userBalanceMap;
 	}
 }

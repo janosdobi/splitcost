@@ -1,24 +1,19 @@
 package home.dj.splitcost.controllers;
 
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
-
-import home.dj.splitcost.entities.User;
-import home.dj.splitcost.services.UserService;
 
 @Controller
 public class LoginController {
+	
+	@GetMapping(value = { "/", "/index" })
+	public String index() {
+		return "index";
+	}
+	
 
-	@Autowired
+	/*@Autowired
 	UserService userService;
 
 	@GetMapping(value = { "/", "/index" })
@@ -63,5 +58,5 @@ public class LoginController {
 		modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
 		modelAndView.setViewName("admin/home");
 		return modelAndView;
-	}
+	}*/
 }

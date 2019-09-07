@@ -1,6 +1,5 @@
 package home.dj.splitcost.services;
 
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
@@ -37,7 +36,6 @@ public class CostService {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		final User user = userRepository.findByEmail(auth.getName());
 		if (cost != null) {
-			cost.setCreateTS(LocalDateTime.now());
 			cost.setOwner(user);
 			costRepository.save(cost);
 			LOG.info(String.format(LogMessage.COST_SAVED, cost));

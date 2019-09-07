@@ -1,6 +1,7 @@
 package home.dj.splitcost.entities;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -19,7 +20,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
-public class User {
+public class User extends DataEntityBase {
 
 	@Id
 	@GeneratedValue
@@ -134,68 +135,24 @@ public class User {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (active ? 1231 : 1237);
-		result = prime * result + ((costs == null) ? 0 : costs.hashCode());
-		result = prime * result + ((debts == null) ? 0 : debts.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
-		return result;
+		return Objects.hash(active, costs, debts, email, firstName, id, lastName, password, roles);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof User)) {
 			return false;
+		}
 		User other = (User) obj;
-		if (active != other.active)
-			return false;
-		if (costs == null) {
-			if (other.costs != null)
-				return false;
-		} else if (!costs.equals(other.costs))
-			return false;
-		if (debts == null) {
-			if (other.debts != null)
-				return false;
-		} else if (!debts.equals(other.debts))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (id != other.id)
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (roles == null) {
-			if (other.roles != null)
-				return false;
-		} else if (!roles.equals(other.roles))
-			return false;
-		return true;
+		return active == other.active && Objects.equals(costs, other.costs) && Objects.equals(debts, other.debts)
+				&& Objects.equals(email, other.email) && Objects.equals(firstName, other.firstName) && id == other.id
+				&& Objects.equals(lastName, other.lastName) && Objects.equals(password, other.password)
+				&& Objects.equals(roles, other.roles);
 	}
 }

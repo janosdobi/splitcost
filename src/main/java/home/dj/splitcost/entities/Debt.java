@@ -1,5 +1,7 @@
 package home.dj.splitcost.entities;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,19 +10,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Debt {
-	
+public class Debt extends SplitCostItemBase {
+
 	@Id
 	@GeneratedValue
-	@Column(name="debt_id")
+	@Column(name = "debt_id")
 	private long id;
-	
-	private double amount;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "cost_id")
 	private Cost cost;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User debtor;
@@ -31,14 +31,6 @@ public class Debt {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
 	}
 
 	public Cost getCost() {
@@ -58,48 +50,29 @@ public class Debt {
 	}
 
 	@Override
+	public String toString() {
+		return "Debt [amount=" + amount + ", cost=" + cost + ", debtor=" + debtor + "]";
+	}
+
+	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(amount);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((cost == null) ? 0 : cost.hashCode());
-		result = prime * result + ((debtor == null) ? 0 : debtor.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
-		return result;
+		return Objects.hash(amount, cost, debtor, id);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof Debt)) {
 			return false;
+		}
 		Debt other = (Debt) obj;
-		if (Double.doubleToLongBits(amount) != Double.doubleToLongBits(other.amount))
-			return false;
-		if (cost == null) {
-			if (other.cost != null)
-				return false;
-		} else if (!cost.equals(other.cost))
-			return false;
-		if (debtor == null) {
-			if (other.debtor != null)
-				return false;
-		} else if (!debtor.equals(other.debtor))
-			return false;
-		if (id != other.id)
-			return false;
-		return true;
+		return Double.doubleToLongBits(amount) == Double.doubleToLongBits(other.amount)
+				&& Objects.equals(cost, other.cost) && Objects.equals(debtor, other.debtor) && id == other.id;
 	}
 
-	@Override
-	public String toString() {
-		return "Debt [amount=" + amount + ", cost=" + cost + ", debtor=" + debtor + "]";
-	}
-	
-	
 }

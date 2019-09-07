@@ -77,8 +77,8 @@ public class UserService {
 		return res;
 	}
 
-	public Map<User, Double> getBalancesForUser(final User user) {
-		Map<User, Double> balances = new HashMap<>();
+	public Map<String, Double> getBalancesForUser(final User user) {
+		Map<String, Double> balances = new HashMap<>();
 
 		if (user != null) {
 			final Collection<Debt> debts = user.getDebts();
@@ -103,11 +103,11 @@ public class UserService {
 		return balances;
 	}
 
-	private void autoSettleZeroBalances(final User user, final Map<User, Double> balances) {
+	private void autoSettleZeroBalances(final User user, final Map<String, Double> balances) {
 		if (!balances.isEmpty()) {
-			final Iterator<Map.Entry<User, Double>> mapIterator = balances.entrySet().iterator();
+			final Iterator<Map.Entry<String, Double>> mapIterator = balances.entrySet().iterator();
 			while (mapIterator.hasNext()) {
-				final Map.Entry<User, Double> entry = mapIterator.next();
+				final Map.Entry<String, Double> entry = mapIterator.next();
 				if (Double.valueOf(0D).equals(entry.getValue())) {
 					mapIterator.remove();
 				}
@@ -115,17 +115,17 @@ public class UserService {
 		}
 	}
 
-	private void addDebtsToBalanceMap(final Collection<Debt> debts, final Map<User, Double> balances) {
+	private void addDebtsToBalanceMap(final Collection<Debt> debts, final Map<String, Double> balances) {
 		for (final Debt debt : debts) {
 			if (debt.getCost() != null) {
 				final User owner = debt.getCost().getOwner();
 				final Double amount = debt.getAmount();
 				if (owner != null && amount != null) {
-					if (!balances.containsKey(owner)) {
-						balances.put(owner, -amount);
+					if (!balances.containsKey(owner.toString())) {
+						balances.put(owner.toString(), -amount);
 					} else {
-						final double prevAmt = balances.get(owner);
-						balances.put(owner, prevAmt - amount);
+						final double prevAmt = balances.get(owner.toString());
+						balances.put(owner.toString(), prevAmt - amount);
 					}
 				} else {
 					LOG.error(String.format(LogMessage.DEBT_DATA_ERROR, debt.getId()));
@@ -135,16 +135,17 @@ public class UserService {
 	}
 
 	private void addClaimsToBalanceMap(final User user, final Collection<Debt> claims,
-			final Map<User, Double> balances) {
+			final Map<String, Double> balances) {
+		//TODO szuboptimalis, hogy a full username-t hasznaljuk key-kent a tablazatban!!!
 		for (final Debt debt : claims) {
 			final User debtor = debt.getDebtor();
 			final Double amount = debt.getAmount();
 			if (debtor != null && amount != null) {
-				if (!balances.containsKey(debtor)) {
-					balances.put(debtor, amount);
+				if (!balances.containsKey(debtor.toString())) {
+					balances.put(debtor.toString(), amount);
 				} else {
-					final double prevAmt = balances.get(debtor);
-					balances.put(debtor, prevAmt + amount);
+					final double prevAmt = balances.get(debtor.toString());
+					balances.put(debtor.toString(), prevAmt + amount);
 				}
 			} else {
 				LOG.error(String.format(LogMessage.DEBT_DATA_ERROR, debt.getId()));

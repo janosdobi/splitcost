@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>SplitCost Application</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<link href="styles/app.css" />
+</head>
+
+<body>
+	<div class="container">
+		<h1 id="welcome_message">Welcome! This is your SplitCost dashboard.</h1>
+		<br>
+		<div class="col-sm-9">
+			<form th:action="@{/logout}" method="get">
+				<button class="btn btn-md btn-warning btn-block" type="Submit">Log out</button>
+			</form>
+		</div>
+		<br>
+		<table id="zs_dashboard" style="width: 100%">
+
+		</table>
+		<br>
+		<div class="no_cost">
+			
+		</div>
+
+		<form th:action="@{/newCost}" method="get">
+			<button class="btn btn-md btn-warning btn-block" type="Submit">I have spent money</button>
+		</form>
+	</div>
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="scripts/app.js" type="text/javascript"></script>
+</body>
+
+</html>

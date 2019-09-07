@@ -9,7 +9,7 @@
 <body>
 	<div class="container">
 		<h1
-			th:text="'Welcome ' + ${userBalanceDTO.user.firstName} + '! This is your SplitCost dashboard.'"></h1>
+			th:text="'Welcome ' + ${userBalanceDTO.user.firstName} + '! This is your ZsebZsido dashboard.'"></h1>
 		<br>
 		<div class="col-sm-9">
 			<form th:action="@{/logout}" method="get">
@@ -38,7 +38,7 @@
 		</div>
 		<br>
 		<div th:if="${#maps.isEmpty(userBalanceDTO.userBalanceMap)}">
-			<p>You do not owe anything, and have no exposures. Go spend some
+			<p>You do not owe nothing, and have no exposures. Go spend some
 				money.</p>
 		</div>
 
@@ -48,8 +48,8 @@
 		</form>
 	</div>
 
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </body>
 </html>
 
