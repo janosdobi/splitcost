@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import home.dj.splitcost.constants.UserMessage;
 import home.dj.splitcost.constants.ViewName;
-import home.dj.splitcost.entities.User;
 import home.dj.splitcost.entities.dto.CostWithDebtorsDTO;
 import home.dj.splitcost.entities.dto.UpdateDebtsDTO;
+import home.dj.splitcost.entities.dto.UserWrapper;
 import home.dj.splitcost.services.CostService;
 import home.dj.splitcost.services.DebtService;
 import home.dj.splitcost.services.UserService;
 
 @Controller
 public class CostController {
-	
+
 	@Autowired
 	UserService userService;
 
@@ -34,8 +34,9 @@ public class CostController {
 	DebtService debtService;
 
 	@GetMapping(ViewName.MAPPING + ViewName.NEW_COST)
-	public String addCost(final Principal principal, @ModelAttribute final CostWithDebtorsDTO costWithDebtorsDTO, final Model model) {
-		final User user = userService.findUserByEmail(principal.getName());
+	public String addCost(final Principal principal, @ModelAttribute final CostWithDebtorsDTO costWithDebtorsDTO,
+			final Model model) {
+		final UserWrapper user = userService.findUserByEmail(principal.getName());
 		model.addAttribute("allUsers", userService.getAllUsersExcept(user));
 		return ViewName.NEW_COST;
 	}
@@ -49,22 +50,22 @@ public class CostController {
 			model.addAttribute(UserMessage.SUCCESS_MSG, UserMessage.COST_SAVED);
 			debtService.convertCost(costWithDebtorsDTO);
 		}
-		
+
 		if (!costWithDebtorsDTO.isSplitEqually()) {
 			res = ViewName.REDIRECT + ViewName.UPDATE_ALLOCATION;
 		} else {
 			res = ViewName.NEW_COST;
 		}
-		
+
 		return res;
 	}
-	
+
 	@GetMapping(ViewName.MAPPING + ViewName.UPDATE_ALLOCATION)
 	public String updateAllocation(final Model model, final Principal principal) {
 		model.addAttribute(new UpdateDebtsDTO(debtService.getLatestDebtsCreatedByUser(principal.getName())));
 		return ViewName.UPDATE_ALLOCATION;
 	}
-	
+
 	@PostMapping(ViewName.MAPPING + ViewName.UPDATE_ALLOCATION)
 	public String postNewAllocation(final UpdateDebtsDTO updateDebtsDTO, final Model model) {
 		String res = ViewName.UPDATE_ALLOCATION;

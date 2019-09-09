@@ -15,13 +15,14 @@ import home.dj.splitcost.entities.Debt;
 import home.dj.splitcost.entities.User;
 import home.dj.splitcost.entities.dto.CostWithDebtorsDTO;
 import home.dj.splitcost.entities.dto.UpdateDebtsDTO;
+import home.dj.splitcost.entities.dto.UserWrapper;
 import home.dj.splitcost.repositories.DebtRepository;
 
 @Service
 public class DebtService {
 
 	private static final Log LOG = LogFactory.getLog(DebtService.class);
-	
+
 	@Autowired
 	DebtRepository debtRepository;
 
@@ -74,7 +75,7 @@ public class DebtService {
 		}
 	}
 
-	public void settleDebt(final User actualUser, final User userToSettleWith) {
+	public void settleDebt(final UserWrapper actualUser, final UserWrapper userToSettleWith) {
 		final Collection<Debt> debts = userService.getAllDebtsBetweenUsers(actualUser, userToSettleWith.getId());
 		debtRepository.deleteAll(debts);
 		LOG.info(String.format(LogMessage.BALANCE_SETTLED, actualUser, userToSettleWith));

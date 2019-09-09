@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
@@ -20,6 +19,7 @@ import home.dj.splitcost.entities.Debt;
 import home.dj.splitcost.entities.Role;
 import home.dj.splitcost.entities.Role.RoleConstant;
 import home.dj.splitcost.entities.User;
+import home.dj.splitcost.entities.dto.UserWrapper;
 import home.dj.splitcost.repositories.RoleRepository;
 import home.dj.splitcost.repositories.UserRepository;
 
@@ -40,8 +40,9 @@ public class UserService {
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 	}
 
-	public User findUserByEmail(String email) {
-		return userRepository.findByEmail(email);
+	public UserWrapper findUserByEmail(String email) {
+		final User user = userRepository.findByEmail(email);
+		return new UserWrapper(user);
 	}
 
 	public void saveUser(final User user) {
@@ -60,16 +61,20 @@ public class UserService {
 		}
 	}
 
-	public Set<User> getAllUsers() {
-		final Set<User> res = new HashSet<>();
-		res.addAll(userRepository.findAll());
+	public Collection<UserWrapper> getAllUsers() {
+		final Collection<UserWrapper> res = new HashSet<>();
+		for (User user : userRepository.findAll()) {
+			res.add(new UserWrapper(user));
+		}
 		return res;
 	}
 
-	public Set<User> getAllUsersExcept(final User user) {
-		final Set<User> res = new HashSet<>();
+	public Collection<UserWrapper> getAllUsersExcept(final UserWrapper user) {
+		final Collection<UserWrapper> res = new HashSet<>();
 		if (user != null) {
-			res.addAll(userRepository.findAll());
+			for (User u : userRepository.findAll()) {
+				res.add(new UserWrapper(u));
+			}
 			res.remove(user);
 		} else {
 			LOG.error(LogMessage.USER_NULL);
@@ -77,8 +82,8 @@ public class UserService {
 		return res;
 	}
 
-	public Map<User, Double> getBalancesForUser(final User user) {
-		Map<User, Double> balances = new HashMap<>();
+	public Map<UserWrapper, Double> getBalancesForUser(final UserWrapper user) {
+		Map<UserWrapper, Double> balances = new HashMap<>();
 
 		if (user != null) {
 			final Collection<Debt> debts = user.getDebts();
@@ -103,11 +108,11 @@ public class UserService {
 		return balances;
 	}
 
-	private void autoSettleZeroBalances(final User user, final Map<User, Double> balances) {
+	private void autoSettleZeroBalances(final UserWrapper user, final Map<UserWrapper, Double> balances) {
 		if (!balances.isEmpty()) {
-			final Iterator<Map.Entry<User, Double>> mapIterator = balances.entrySet().iterator();
+			final Iterator<Map.Entry<UserWrapper, Double>> mapIterator = balances.entrySet().iterator();
 			while (mapIterator.hasNext()) {
-				final Map.Entry<User, Double> entry = mapIterator.next();
+				final Map.Entry<UserWrapper, Double> entry = mapIterator.next();
 				if (Double.valueOf(0D).equals(entry.getValue())) {
 					mapIterator.remove();
 				}
@@ -115,10 +120,10 @@ public class UserService {
 		}
 	}
 
-	private void addDebtsToBalanceMap(final Collection<Debt> debts, final Map<User, Double> balances) {
+	private void addDebtsToBalanceMap(final Collection<Debt> debts, final Map<UserWrapper, Double> balances) {
 		for (final Debt debt : debts) {
 			if (debt.getCost() != null) {
-				final User owner = debt.getCost().getOwner();
+				final UserWrapper owner = debt.getCost().getOwner();
 				final Double amount = debt.getAmount();
 				if (owner != null && amount != null) {
 					if (!balances.containsKey(owner)) {
@@ -134,10 +139,10 @@ public class UserService {
 		}
 	}
 
-	private void addClaimsToBalanceMap(final User user, final Collection<Debt> claims,
-			final Map<User, Double> balances) {
+	private void addClaimsToBalanceMap(final UserWrapper user, final Collection<Debt> claims,
+			final Map<UserWrapper, Double> balances) {
 		for (final Debt debt : claims) {
-			final User debtor = debt.getDebtor();
+			final UserWrapper debtor = debt.getDebtor();
 			final Double amount = debt.getAmount();
 			if (debtor != null && amount != null) {
 				if (!balances.containsKey(debtor)) {
@@ -152,7 +157,7 @@ public class UserService {
 		}
 	}
 
-	public Collection<Debt> getAllDebtsBetweenUsers(final User owner, final Long debtorId) {
+	public Collection<Debt> getAllDebtsBetweenUsers(final UserWrapper owner, final Long debtorId) {
 		Collection<Debt> res = new HashSet<>();
 		if (owner != null && debtorId != null) {
 			res = owner.getCosts().stream().flatMap(cost -> cost.getDebts().stream())

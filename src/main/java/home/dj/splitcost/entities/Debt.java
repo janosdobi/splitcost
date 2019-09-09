@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import home.dj.splitcost.entities.dto.UserWrapper;
+
 @Entity
 public class Debt extends SplitCostItemBase {
 	
@@ -39,8 +41,8 @@ public class Debt extends SplitCostItemBase {
 		this.cost = cost;
 	}
 
-	public User getDebtor() {
-		return debtor;
+	public UserWrapper getDebtor() {
+		return new UserWrapper(debtor);
 	}
 
 	public void setDebtor(User debtor) {

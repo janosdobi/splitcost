@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import home.dj.splitcost.entities.dto.UserWrapper;
+
 @Entity
 public class Cost extends SplitCostItemBase {
 	
@@ -44,8 +46,8 @@ public class Cost extends SplitCostItemBase {
 		this.name = name;
 	}
 
-	public User getOwner() {
-		return owner;
+	public UserWrapper getOwner() {
+		return new UserWrapper(owner);
 	}
 
 	public void setOwner(User owner) {

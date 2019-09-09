@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import home.dj.splitcost.constants.ViewName;
 import home.dj.splitcost.entities.User;
+import home.dj.splitcost.entities.dto.UserWrapper;
 import home.dj.splitcost.services.UserService;
 
 @Controller
@@ -21,33 +23,33 @@ public class LoginController {
 	@Autowired
 	UserService userService;
 
-	@GetMapping(value = { "/", "/index" })
+	@GetMapping(value = { ViewName.MAPPING, ViewName.MAPPING + ViewName.INDEX })
 	public ModelAndView index() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("index");
+		modelAndView.setViewName(ViewName.INDEX);
 		return modelAndView;
 	}
 
-	@GetMapping(value = "/register")
+	@GetMapping(value = ViewName.MAPPING + ViewName.REGISTER)
 	public String registration(@ModelAttribute final User user) {
-		return "register";
+		return ViewName.REGISTER;
 	}
 
-	@PostMapping(value = "/register")
+	@PostMapping(value = ViewName.MAPPING + ViewName.REGISTER)
 	public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView();
-		User userExists = userService.findUserByEmail(user.getEmail());
+		UserWrapper userExists = userService.findUserByEmail(user.getEmail());
 		if (userExists != null) {
 			bindingResult.rejectValue("email", "error.user",
 					"There is already a user registered with the email provided");
 		}
 		if (bindingResult.hasErrors()) {
-			modelAndView.setViewName("register");
+			modelAndView.setViewName(ViewName.REGISTER);
 		} else {
 			userService.saveUser(user);
 			modelAndView.addObject("successMessage", "User has been registered successfully");
 			modelAndView.addObject("user", new User());
-			modelAndView.setViewName("register");
+			modelAndView.setViewName(ViewName.REGISTER);
 
 		}
 		return modelAndView;
@@ -57,7 +59,7 @@ public class LoginController {
 	public ModelAndView home() {
 		final ModelAndView modelAndView = new ModelAndView();
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		final User user = userService.findUserByEmail(auth.getName());
+		final UserWrapper user = userService.findUserByEmail(auth.getName());
 		modelAndView.addObject("userName",
 				"Welcome " + user.getFirstName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
 		modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
