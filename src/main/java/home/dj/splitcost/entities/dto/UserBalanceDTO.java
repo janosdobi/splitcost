@@ -4,7 +4,7 @@ import java.util.Map;
 
 import home.dj.splitcost.entities.User;
 
-public class UserBalanceDTO {
+public class UserBalanceDTO implements DataDTO {
 	
 	private User user;
 	private Map<User, Double> userBalanceMap;

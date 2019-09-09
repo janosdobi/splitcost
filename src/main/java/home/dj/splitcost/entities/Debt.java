@@ -8,14 +8,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Debt {
+public class Debt extends SplitCostItemBase {
 	
 	@Id
 	@GeneratedValue
 	@Column(name="debt_id")
 	private long id;
-	
-	private double amount;
 	
 	@ManyToOne
 	@JoinColumn(name = "cost_id")
@@ -31,14 +29,6 @@ public class Debt {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
 	}
 
 	public Cost getCost() {

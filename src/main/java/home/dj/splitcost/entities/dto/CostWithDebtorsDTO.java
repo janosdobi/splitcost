@@ -5,7 +5,7 @@ import java.util.Collection;
 import home.dj.splitcost.entities.Cost;
 import home.dj.splitcost.entities.User;
 
-public class CostWithDebtorsDTO {
+public class CostWithDebtorsDTO implements DataDTO {
 
 	private Collection<User> selectedUsers;
 	

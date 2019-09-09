@@ -5,7 +5,7 @@ import java.util.List;
 
 import home.dj.splitcost.entities.Debt;
 
-public class UpdateDebtsDTO {
+public class UpdateDebtsDTO implements DataDTO {
 	private List<Debt> debts;
 	private double selfAllocated;
 

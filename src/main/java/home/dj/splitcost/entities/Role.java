@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Role {
+public class Role extends DataEntityBase {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

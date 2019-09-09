@@ -16,6 +16,6 @@ public class SplitCostApplication {
 	@Bean
 	public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>
 	  webServerFactoryCustomizer() {
-	    return factory -> factory.setContextPath("/zsebzsi");
+	    return factory -> factory.setContextPath("/splitcost");
 	}
 }

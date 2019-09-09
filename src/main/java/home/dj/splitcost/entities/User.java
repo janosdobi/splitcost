@@ -19,7 +19,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
-public class User {
+public class User extends DataEntityBase {
 
 	@Id
 	@GeneratedValue

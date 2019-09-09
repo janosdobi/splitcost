@@ -1,6 +1,5 @@
 package home.dj.splitcost.entities;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 import javax.persistence.Column;
@@ -12,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Cost {
+public class Cost extends SplitCostItemBase {
 	
 	@Id
 	@GeneratedValue
@@ -20,10 +19,6 @@ public class Cost {
 	private long id;
 	
 	private String name;
-	
-	private double amount;
-	
-	private LocalDateTime createTS;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -39,22 +34,6 @@ public class Cost {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-
-	public LocalDateTime getCreateTS() {
-		return createTS;
-	}
-
-	public void setCreateTS(LocalDateTime createTS) {
-		this.createTS = createTS;
 	}
 
 	public String getName() {
